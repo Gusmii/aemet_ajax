@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hola Mundo</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+    <style>
+
+        .Titulos{
+            background-color: gray;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="container"></div>
+
+    <script>
+
+        var apikey = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZ3VzbWFub3BAZ21haWwuY29tIiwianRpIjoiYTdiNTNmZjUtODY2OS00ZGY4LTgzMDAtOTA3OTI4NGE0NTAxIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE1NTY1MjAxMDQsInVzZXJJZCI6ImE3YjUzZmY1LTg2NjktNGRmOC04MzAwLTkwNzkyODRhNDUwMSIsInJvbGUiOiIifQ.StPLvJESWHnbrEcPfoRlX0DPFIrR3Dt234MlAXSyZJU";
+
+
+        var link = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://opendata.aemet.es/opendata/api/valores/climatologicos/inventarioestaciones/todasestaciones/?api_key=" + apikey,
+            "method": "GET",
+            "headers": {
+                "cache-control": "no-cache"
+            }
+        }
+
+        $.ajax(link).done(function (response) {
+            console.log(response);
+
+            var link2 = {
+                "async": true,
+                "crossDomain": true,
+                "url": response.datos,
+                "method": "GET",
+                "headers": {
+                    "cache-control": "no-cache"
+                }
+            }
+
+            $.getJSON(link2).done(function (response2) {
+                console.log(response2);
+
+
+
+                var htmlcode = '<h1>Inventario de estaciones</h1>';
+                htmlcode += '<table border="1">';
+                htmlcode += '<tr>';
+                htmlcode += '<td class="Titulos">Nombre</td>';
+                htmlcode += '<td class="Titulos">Provincia</td>';
+                htmlcode += '<td class="Titulos">Longitud</td>';
+                htmlcode += '<td class="Titulos">Latitud</td>';
+                htmlcode += '<td class="Titulos">Indsinop</td>';
+                htmlcode += '<td class="Titulos">Indicativo</td>';
+                htmlcode += '<td class="Titulos">Altitud</td>';
+                htmlcode += '</tr>';
+
+                for (i = 0; i < 10; i++) {
+                    //console.log(response2[i].nombre)
+                    htmlcode += '<tr>';
+                    htmlcode += '<td>' + response2[i].nombre + '</td>';
+                    htmlcode += '<td>' + response2[i].provincia + '</td>';
+                    htmlcode += '<td>' + response2[i].longitud + '</td>';
+                    htmlcode += '<td>' + response2[i].latitud + '</td>';
+                    htmlcode += '<td>' + response2[i].indsinop + '</td>';
+                    htmlcode += '<td>' + response2[i].indicativo + '</td>';
+                    htmlcode += '<td>' + response2[i].altitud + '</td>';
+                    htmlcode += '</tr>';    
+                    
+                }
+                htmlcode += '</table>';
+                $('.container').append(htmlcode);
+            });
+
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>
